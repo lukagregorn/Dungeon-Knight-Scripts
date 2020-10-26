@@ -2,23 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum PlayerState {
+    walk,
+    attack,
+    interact
+}
+
+
 public class PlayerController : MonoBehaviour
 {
-
     public float speed;
 
     private Rigidbody2D myRigidbody;
     private Vector3 change;
     private Animator animator;
+    private PlayerState currentState;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        currentState = PlayerState.walk;
     }
 
     // Update is called once per frame
+    void Update() {
+        if (Input.GetButtonDown("Attack") && currentState != PlayerState.attack) {
+            StartCoroutine(AttackCoroutine());
+        }
+    }
+
+
+    // FixedUpdate is called when physics update
     void FixedUpdate()
     {
         // reset change
@@ -28,10 +45,23 @@ public class PlayerController : MonoBehaviour
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
 
-        // move character
-        UpdateAnimationAndMove();
+        if (currentState == PlayerState.walk) {
+            // move character
+            UpdateAnimationAndMove();
+        }
     }
 
+
+    private IEnumerator AttackCoroutine() {
+        currentState = PlayerState.attack;
+        animator.SetBool("attacking", true);
+        yield return null;
+        animator.SetBool("attacking", false);
+
+        yield return new WaitForSeconds(.33f);
+
+        currentState = PlayerState.walk;
+    }
 
     void UpdateAnimationAndMove() {
         if (change != Vector3.zero) {

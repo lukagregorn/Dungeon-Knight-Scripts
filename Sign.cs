@@ -25,7 +25,7 @@ public class Sign : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && playerInRange) {
+        if (Input.GetButtonDown("Interact") && playerInRange) {
 
             if (dialogBox.activeInHierarchy) {
                 
@@ -65,7 +65,7 @@ public class Sign : MonoBehaviour
         }
 
     }
-
+    
 
     private void OnTriggerExit2D(Collider2D other) {
 
