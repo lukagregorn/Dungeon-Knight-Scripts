@@ -13,13 +13,18 @@ public class Enemy : Humanoid
 
 
     // MOVEMENT
-    public void MoveTowardsTarget() {
+    public Vector3 MoveTowardsTarget() {
         if (currentState == HumanoidState.idle || currentState == HumanoidState.walk) {
             Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             myRigidbody.MovePosition(tmp);
 
             ChangeState(HumanoidState.walk);
+
+            // returns direction
+            return tmp - transform.position;
         }
+
+        return Vector3.zero;
     }
 
     public bool IsInChaseRadius() {
