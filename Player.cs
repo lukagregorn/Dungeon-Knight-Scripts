@@ -3,30 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum PlayerState {
-    walk,
-    attack,
-    interact
-}
-
-
-public class PlayerController : MonoBehaviour
+public class Player : Humanoid
 {
-    public float speed;
-
-    private Rigidbody2D myRigidbody;
     private Vector3 change;
     private Animator animator;
-    public PlayerState currentState;
 
     // Start is called before the first frame update
     void Start()
     {
-        myRigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        myRigidbody = GetComponent<Rigidbody2D>();
 
         // set initial state
-        currentState = PlayerState.walk;
+        currentState = HumanoidState.walk;
 
         // initial direction
         animator.SetFloat("moveX", 0);
@@ -35,7 +24,8 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetButtonDown("Attack") && currentState != PlayerState.attack) {
+        if (Input.GetButtonDown("Attack") && currentState != HumanoidState.attack
+                && currentState != HumanoidState.stagger) {
             StartCoroutine(AttackCoroutine());
         }
     }
@@ -51,24 +41,14 @@ public class PlayerController : MonoBehaviour
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
 
-        if (currentState == PlayerState.walk) {
+        if (currentState == HumanoidState.walk || currentState == HumanoidState.idle) {
             // move character
             UpdateAnimationAndMove();
         }
     }
+ 
 
-
-    private IEnumerator AttackCoroutine() {
-        currentState = PlayerState.attack;
-        animator.SetBool("attacking", true);
-        yield return null;
-        animator.SetBool("attacking", false);
-
-        yield return new WaitForSeconds(.33f);
-
-        currentState = PlayerState.walk;
-    }
-
+    // MOVEMENT
     void UpdateAnimationAndMove() {
         if (change != Vector3.zero) {
             MoveCharacter();
@@ -82,7 +62,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void MoveCharacter()
     {
         change.Normalize();
@@ -90,4 +69,18 @@ public class PlayerController : MonoBehaviour
             transform.position + change * speed * Time.deltaTime
         );
     }
+
+
+    // COMBAT
+    private IEnumerator AttackCoroutine() {
+        currentState = HumanoidState.attack;
+        animator.SetBool("attacking", true);
+        yield return null;
+        animator.SetBool("attacking", false);
+
+        yield return new WaitForSeconds(.33f);
+
+        currentState = HumanoidState.walk;
+    }
+
 }

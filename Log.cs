@@ -5,27 +5,47 @@ using UnityEngine;
 public class Log : Enemy
 {
 
-    public Transform home;
-    public Transform target;
-    public float chaseRadius;
-    public float attackRadius;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
+        currentState = HumanoidState.idle;
+        
         target = GameObject.FindWithTag("Player").transform;
+
+        animator = GetComponent<Animator>();
+        myRigidbody = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        CheckDistance();
-    }
-
-    void CheckDistance() {
-        if (Vector3.Distance(target.position, transform.position) <= chaseRadius
-                && Vector3.Distance(target.position, transform.position) > attackRadius) {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+        if (IsInChaseRadius()) {
+            if (!IsInAttackRadius()) {
+                MoveTowardsTarget();
+            } else {
+                Debug.Log("Attack");
+            }
         }
     }
+
+
+    // MOVEMENT
+
+
+    // COMBAT
+    private void OnTriggerEnter2D(Collider2D other) {
+        // check if player
+        if (other.gameObject.CompareTag("Player")) {
+            
+            Vector2 knockVector = other.GetComponent<Rigidbody2D>().transform.position - transform.position;
+            knockVector = knockVector.normalized * thrust;
+
+            other.GetComponent<Humanoid>().Knockback(knockVector, knockTime);
+        }
+    }
+    
+
 }

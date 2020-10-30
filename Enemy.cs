@@ -2,23 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+
+public class Enemy : Humanoid
 {
 
-    public int health;
-    public string enemyName;
-    public int baseAttack;
-    public float moveSpeed;
+    public Transform home;
+    public Transform target;
+    public float chaseRadius;
+    public float attackRadius;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    // MOVEMENT
+    public void MoveTowardsTarget() {
+        if (currentState == HumanoidState.idle || currentState == HumanoidState.walk) {
+            Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            myRigidbody.MovePosition(tmp);
+
+            ChangeState(HumanoidState.walk);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public bool IsInChaseRadius() {
+        return (Vector3.Distance(target.position, transform.position) <= chaseRadius);
     }
+
+
+    public bool IsInAttackRadius() {    
+        return (Vector3.Distance(target.position, transform.position) <= attackRadius);
+    }
+
+
+
+    // COMBAT
+
 }
