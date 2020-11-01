@@ -51,7 +51,7 @@ public class Log : Enemy
     // COMBAT
     private void OnTriggerEnter2D(Collider2D other) {
         // check if player
-        if (other.gameObject.CompareTag("Player")) {
+        if (other.gameObject.CompareTag("Player") && other.isTrigger) {
             
             Vector2 knockVector = other.GetComponent<Rigidbody2D>().transform.position - transform.position;
             knockVector = knockVector.normalized * thrust;
