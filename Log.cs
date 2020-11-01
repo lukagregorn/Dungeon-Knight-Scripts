@@ -5,22 +5,8 @@ using UnityEngine;
 public class Log : Enemy
 {
 
-    private Animator animator;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentState = HumanoidState.idle;
-        
-        target = GameObject.FindWithTag("Player").transform;
-
-        animator = GetComponent<Animator>();
-        myRigidbody = GetComponent<Rigidbody2D>();
-        
-    }
-
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (IsInChaseRadius()) {
 

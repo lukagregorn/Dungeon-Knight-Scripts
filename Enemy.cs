@@ -10,11 +10,18 @@ public class Enemy : Humanoid
     public Transform target;
     public float chaseRadius;
     public float attackRadius;
+    
+
+    private void Start() {
+        target = GameObject.FindWithTag("Player").transform;
+    }
 
 
     // MOVEMENT
-    public Vector3 MoveTowardsTarget() {
-        if (currentState == HumanoidState.idle || currentState == HumanoidState.walk) {
+    protected Vector3 MoveTowardsTarget() {
+        HumanoidState state = GetState();
+
+        if (state == HumanoidState.idle || state == HumanoidState.walk) {
             Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             myRigidbody.MovePosition(tmp);
 
@@ -27,12 +34,12 @@ public class Enemy : Humanoid
         return Vector3.zero;
     }
 
-    public bool IsInChaseRadius() {
+    protected bool IsInChaseRadius() {
         return (Vector3.Distance(target.position, transform.position) <= chaseRadius);
     }
 
 
-    public bool IsInAttackRadius() {    
+    protected bool IsInAttackRadius() {    
         return (Vector3.Distance(target.position, transform.position) <= attackRadius);
     }
 

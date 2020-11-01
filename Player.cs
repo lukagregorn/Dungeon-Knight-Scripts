@@ -6,34 +6,27 @@ using UnityEngine;
 public class Player : Humanoid
 {
     private Vector3 change;
-    private Animator animator;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-        myRigidbody = GetComponent<Rigidbody2D>();
-
-        // set initial state
-        currentState = HumanoidState.walk;
-
+    private void Start() {
         // initial direction
         animator.SetFloat("moveX", 0);
         animator.SetFloat("moveY", -1);
     }
 
     // Update is called once per frame
-    void Update() {
-        if (Input.GetButtonDown("Attack") && currentState != HumanoidState.attack
-                && currentState != HumanoidState.stagger) {
+    private void Update() {
+        HumanoidState state = GetState();
+
+        if (Input.GetButtonDown("Attack") && state != HumanoidState.attack
+                && state != HumanoidState.stagger) {
             StartCoroutine(AttackCoroutine());
         }
     }
 
 
     // FixedUpdate is called when physics update
-    void FixedUpdate()
-    {
+    private void FixedUpdate() {
         // reset change
         change = Vector3.zero;
 
@@ -41,7 +34,9 @@ public class Player : Humanoid
         change.x = Input.GetAxisRaw("Horizontal");
         change.y = Input.GetAxisRaw("Vertical");
 
-        if (currentState == HumanoidState.walk || currentState == HumanoidState.idle) {
+        HumanoidState state = GetState();
+
+        if (state == HumanoidState.walk || state == HumanoidState.idle) {
             // move character
             UpdateAnimationAndMove();
         }
@@ -49,7 +44,7 @@ public class Player : Humanoid
  
 
     // MOVEMENT
-    void UpdateAnimationAndMove() {
+    private void UpdateAnimationAndMove() {
         if (change != Vector3.zero) {
             MoveCharacter();
 
@@ -62,7 +57,7 @@ public class Player : Humanoid
         }
     }
 
-    void MoveCharacter()
+    private void MoveCharacter()
     {
         change.Normalize();
         myRigidbody.MovePosition(
@@ -73,14 +68,14 @@ public class Player : Humanoid
 
     // COMBAT
     private IEnumerator AttackCoroutine() {
-        currentState = HumanoidState.attack;
+        ChangeState(HumanoidState.attack);
         animator.SetBool("attacking", true);
         yield return null;
         animator.SetBool("attacking", false);
 
         yield return new WaitForSeconds(.33f);
 
-        currentState = HumanoidState.walk;
+        ChangeState(HumanoidState.walk);
     }
 
 }

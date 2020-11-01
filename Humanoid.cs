@@ -9,24 +9,42 @@ public enum HumanoidState {
     attack,
     stagger,
     interact,
+    dead
 }
 
 
 public class Humanoid : MonoBehaviour
 {
-    public HumanoidState currentState;
     public string humanoidName;
-    public int health;
-    public float speed;
+    protected HumanoidState currentState;
+    protected Rigidbody2D myRigidbody;
+    protected Animator animator;
+    public IntValue initialHealth;
+    protected int health;
+    public FloatValue initialSpeed;
+    protected float speed;
     public float thrust;
     public float knockTime;
-    public int baseAttack;
+    public IntValue initialDamage;
+    protected int baseDamage;
 
-    public Rigidbody2D myRigidbody;
+    
+    // AWAKE [make references to own objects and init variables]
+    private void Awake() {
+        animator = GetComponent<Animator>();
+        myRigidbody = GetComponent<Rigidbody2D>();
+
+        health = initialHealth.initialValue;
+        speed = initialSpeed.initialValue;
+        baseDamage = initialDamage.initialValue;
+
+        currentState = HumanoidState.idle;
+
+    }
 
 
     // STATE
-    public void ChangeState(HumanoidState newState) {
+    protected void ChangeState(HumanoidState newState) {
         if (currentState != newState) {
             currentState = newState;
         }
@@ -38,8 +56,17 @@ public class Humanoid : MonoBehaviour
 
 
     // COMBAT
-    public virtual void Knockback(Vector2 knockVector, float recoverTime) {
-        if (myRigidbody && currentState != HumanoidState.stagger) {
+    public void TakeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            ChangeState(HumanoidState.dead);
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void Knockback(Vector2 knockVector, float recoverTime) {
+        HumanoidState state = GetState();
+        if (myRigidbody && state != HumanoidState.stagger && !IsDead()) {
 
             // set state
             ChangeState(HumanoidState.stagger);
@@ -52,7 +79,7 @@ public class Humanoid : MonoBehaviour
         }
     }
 
-    public virtual IEnumerator RecoverCoroutine(float recoverTime) {
+    public IEnumerator RecoverCoroutine(float recoverTime) {
         if (myRigidbody) {
 
             yield return new WaitForSeconds(recoverTime);
@@ -62,5 +89,17 @@ public class Humanoid : MonoBehaviour
             ChangeState(HumanoidState.idle);
         }
     }
+
+
+    // COMMON CHECKS
+    public bool IsDead() { return (GetState() == HumanoidState.dead); }
+
+
+    // GETTERS
+    public float GetThrust() { return thrust; }
+    public float GetKnockTime() { return knockTime; }
+    public int GetDamage() { return baseDamage; }
+    public Rigidbody2D GetRigidbody() { return myRigidbody; }
+
 }
 
