@@ -53,8 +53,11 @@ public class Log : Enemy
         // check if player
         if (other.gameObject.CompareTag("Player") && other.isTrigger) {
             
+            float knockTime = GetKnockTime();
+            float knockThrust = GetKnockThrust();
+
             Vector2 knockVector = other.GetComponent<Rigidbody2D>().transform.position - transform.position;
-            knockVector = knockVector.normalized * thrust;
+            knockVector = knockVector.normalized * knockThrust;
 
             other.GetComponent<Humanoid>().Knockback(knockVector, knockTime);
         }

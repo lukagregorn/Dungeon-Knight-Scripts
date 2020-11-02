@@ -21,13 +21,13 @@ public class PlayerHit : MonoBehaviour
             Humanoid enemyHuman = other.GetComponent<Humanoid>();
 
             // get values
-            float thrust = playerHuman.GetThrust();
+            float knockThrust = playerHuman.GetKnockThrust();
             float knockTime = playerHuman.GetKnockTime();
             int damage = playerHuman.GetDamage();
 
             // calculate knock vector
             Vector2 knockVector = enemyHuman.GetRigidbody().transform.position - transform.position;
-            knockVector = knockVector.normalized * thrust;
+            knockVector = knockVector.normalized * knockThrust;
 
             // inflict knockback and damage
             enemyHuman.TakeDamage(damage);

@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class Player : Humanoid
 {
-    private Vector3 change;
+    public Signal playerHealthSignal;
+    public IntValue health;
+    private Vector3 moveChange;
 
     // Start is called before the first frame update
     private void Start() {
+        // initial health
+        health.initialValue = maxHealth.initialValue;
+
         // initial direction
         animator.SetFloat("moveX", 0);
         animator.SetFloat("moveY", -1);
@@ -28,11 +33,11 @@ public class Player : Humanoid
     // FixedUpdate is called when physics update
     private void FixedUpdate() {
         // reset change
-        change = Vector3.zero;
+        moveChange = Vector3.zero;
 
         // get new change
-        change.x = Input.GetAxisRaw("Horizontal");
-        change.y = Input.GetAxisRaw("Vertical");
+        moveChange.x = Input.GetAxisRaw("Horizontal");
+        moveChange.y = Input.GetAxisRaw("Vertical");
 
         HumanoidState state = GetState();
 
@@ -45,12 +50,12 @@ public class Player : Humanoid
 
     // MOVEMENT
     private void UpdateAnimationAndMove() {
-        if (change != Vector3.zero) {
+        if (moveChange != Vector3.zero) {
             MoveCharacter();
 
             // animator blend tree changes
-            animator.SetFloat("moveX", change.x);
-            animator.SetFloat("moveY", change.y);
+            animator.SetFloat("moveX", moveChange.x);
+            animator.SetFloat("moveY", moveChange.y);
             animator.SetBool("moving", true);
         } else {
             animator.SetBool("moving", false);
@@ -59,9 +64,9 @@ public class Player : Humanoid
 
     private void MoveCharacter()
     {
-        change.Normalize();
+        moveChange.Normalize();
         myRigidbody.MovePosition(
-            transform.position + change * speed * Time.deltaTime
+            transform.position + moveChange * speed.initialValue * Time.deltaTime
         );
     }
 
@@ -76,6 +81,19 @@ public class Player : Humanoid
         yield return new WaitForSeconds(.33f);
 
         ChangeState(HumanoidState.walk);
+    }
+
+    
+    public override void TakeDamage(int damage) {
+        health.initialValue -= damage;
+        if (health.initialValue <= 0) {
+            ChangeState(HumanoidState.dead);
+            gameObject.SetActive(false);
+
+            return;
+        }
+
+        playerHealthSignal.Fire();
     }
 
 }

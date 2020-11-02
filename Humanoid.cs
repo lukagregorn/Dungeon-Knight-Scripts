@@ -19,27 +19,18 @@ public class Humanoid : MonoBehaviour
     protected HumanoidState currentState;
     protected Rigidbody2D myRigidbody;
     protected Animator animator;
-    public IntValue initialHealth;
-    protected int health;
-    public FloatValue initialSpeed;
-    protected float speed;
-    public float thrust;
-    public float knockTime;
-    public IntValue initialDamage;
-    protected int baseDamage;
-
+    public IntValue maxHealth;
+    public FloatValue speed;
+    public IntValue damage;
+    public FloatValue knockTime;
+    public FloatValue knockThrust;
     
-    // AWAKE [make references to own objects and init variables]
+    // AWAKE [make references to own objects]
     private void Awake() {
         animator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
 
-        health = initialHealth.initialValue;
-        speed = initialSpeed.initialValue;
-        baseDamage = initialDamage.initialValue;
-
         currentState = HumanoidState.idle;
-
     }
 
 
@@ -55,15 +46,8 @@ public class Humanoid : MonoBehaviour
     }
 
 
-    // COMBAT
-    public void TakeDamage(int damage) {
-        health -= damage;
-        if (health <= 0) {
-            ChangeState(HumanoidState.dead);
-            gameObject.SetActive(false);
-        }
-    }
-
+    // COMBAT COMMON METHODS
+    public virtual void TakeDamage(int damage) { return; }
     public void Knockback(Vector2 knockVector, float recoverTime) {
         HumanoidState state = GetState();
         if (myRigidbody && state != HumanoidState.stagger && !IsDead()) {
@@ -96,10 +80,10 @@ public class Humanoid : MonoBehaviour
 
 
     // GETTERS
-    public float GetThrust() { return thrust; }
-    public float GetKnockTime() { return knockTime; }
-    public int GetDamage() { return baseDamage; }
     public Rigidbody2D GetRigidbody() { return myRigidbody; }
+    public float GetKnockThrust() { return knockThrust.initialValue; }
+    public float GetKnockTime() { return knockTime.initialValue; }
+    public int GetDamage() { return damage.initialValue; }
 
 }
 
