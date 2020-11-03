@@ -7,16 +7,21 @@ public class Player : Humanoid
 {
     public Signal playerHealthSignal;
     public IntValue health;
+    public VectorValue playerPositionStorage;
     private Vector3 moveChange;
 
     // Start is called before the first frame update
     private void Start() {
         // initial health
-        health.initialValue = maxHealth.initialValue;
+        if (maxHealth.value % 2 != 0)
+            Debug.LogWarning("Player max health is not even. Hearts may not show correctly");
+        health.value = maxHealth.value;
 
         // initial direction
         animator.SetFloat("moveX", 0);
         animator.SetFloat("moveY", -1);
+
+        transform.position = playerPositionStorage.value;
     }
 
     // Update is called once per frame
@@ -66,7 +71,7 @@ public class Player : Humanoid
     {
         moveChange.Normalize();
         myRigidbody.MovePosition(
-            transform.position + moveChange * speed.initialValue * Time.deltaTime
+            transform.position + moveChange * speed.value * Time.deltaTime
         );
     }
 
@@ -85,15 +90,14 @@ public class Player : Humanoid
 
     
     public override void TakeDamage(int damage) {
-        health.initialValue -= damage;
-        if (health.initialValue <= 0) {
-            ChangeState(HumanoidState.dead);
-            gameObject.SetActive(false);
+        
+        health.value -= damage;
+        playerHealthSignal.Fire();
 
-            return;
+        if (health.value <= 0) {
+            OnDeath();
         }
 
-        playerHealthSignal.Fire();
     }
 
 }

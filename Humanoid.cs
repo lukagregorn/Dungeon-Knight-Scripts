@@ -74,6 +74,10 @@ public class Humanoid : MonoBehaviour
         }
     }
 
+    public void OnDeath() {
+        ChangeState(HumanoidState.dead);
+        gameObject.SetActive(false);
+    }
 
     // COMMON CHECKS
     public bool IsDead() { return (GetState() == HumanoidState.dead); }
@@ -81,9 +85,9 @@ public class Humanoid : MonoBehaviour
 
     // GETTERS
     public Rigidbody2D GetRigidbody() { return myRigidbody; }
-    public float GetKnockThrust() { return knockThrust.initialValue; }
-    public float GetKnockTime() { return knockTime.initialValue; }
-    public int GetDamage() { return damage.initialValue; }
+    public float GetKnockThrust() { return knockThrust.value; }
+    public float GetKnockTime() { return knockTime.value; }
+    public int GetDamage() { return damage.value; }
 
 }
 

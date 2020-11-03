@@ -10,24 +10,30 @@ public class HealthManager : MonoBehaviour
     public Sprite halfFullHeart;
     public Sprite emptyHeart;
     public IntValue maxHealth;
+    public IntValue playerHealth;
 
     private void Start() {
-        InitHearts();
+        UpdateHearts();
     }
 
-    public void InitHearts() {
+    public void UpdateHearts() {
+        
+        int totalAmount = maxHealth.value / 2;
+        int fullAmount = playerHealth.value / 2;
 
-        int amount = maxHealth.initialValue / 2;
-
-        for (int i = 0; i < amount; i++) {
+        // set active heart containers
+        for (int i = 0; i < totalAmount; i++) {
             hearts[i].gameObject.SetActive(true);
-            hearts[i].sprite = fullHeart;
+            if (i < fullAmount)
+                hearts[i].sprite = fullHeart;
+            else
+                hearts[i].sprite = emptyHeart;
         }
 
-        if (maxHealth.initialValue / 2 != 0) {
-            hearts[amount + 1].gameObject.SetActive(true);
-            hearts[amount + 1].sprite = halfFullHeart;
+        if (playerHealth.value % 2 != 0) {
+            hearts[fullAmount].sprite = halfFullHeart;
         }
-
+        
     }
+
 }

@@ -14,7 +14,7 @@ public class Enemy : Humanoid
     
 
     private void Start() {
-        health = maxHealth.initialValue;
+        health = maxHealth.value;
         target = GameObject.FindWithTag("Player").transform;
     }
 
@@ -24,7 +24,7 @@ public class Enemy : Humanoid
         HumanoidState state = GetState();
 
         if (state == HumanoidState.idle || state == HumanoidState.walk) {
-            Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed.initialValue * Time.deltaTime);
+            Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed.value * Time.deltaTime);
             myRigidbody.MovePosition(tmp);
 
             ChangeState(HumanoidState.walk);
@@ -37,12 +37,12 @@ public class Enemy : Humanoid
     }
 
     protected bool IsInChaseRadius() {
-        return (Vector3.Distance(target.position, transform.position) <= chaseRadius.initialValue);
+        return (Vector3.Distance(target.position, transform.position) <= chaseRadius.value);
     }
 
 
     protected bool IsInAttackRadius() {    
-        return (Vector3.Distance(target.position, transform.position) <= attackRadius.initialValue);
+        return (Vector3.Distance(target.position, transform.position) <= attackRadius.value);
     }
 
 
@@ -50,8 +50,7 @@ public class Enemy : Humanoid
     public override void TakeDamage(int damage) {
         health -= damage;
         if (health <= 0) {
-            ChangeState(HumanoidState.dead);
-            gameObject.SetActive(false);
+            OnDeath();
         }
     }
 

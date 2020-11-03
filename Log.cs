@@ -52,14 +52,22 @@ public class Log : Enemy
     private void OnTriggerEnter2D(Collider2D other) {
         // check if player
         if (other.gameObject.CompareTag("Player") && other.isTrigger) {
+
+            // get humanoid object
+            Humanoid playerHuman = other.GetComponent<Humanoid>();
             
+            // get values
             float knockTime = GetKnockTime();
             float knockThrust = GetKnockThrust();
+            int damage = GetDamage();
 
+            // calculate knock vector
             Vector2 knockVector = other.GetComponent<Rigidbody2D>().transform.position - transform.position;
             knockVector = knockVector.normalized * knockThrust;
 
-            other.GetComponent<Humanoid>().Knockback(knockVector, knockTime);
+            // inflict knockback and damage
+            playerHuman.TakeDamage(damage);
+            playerHuman.Knockback(knockVector, knockTime);
         }
     }
     
