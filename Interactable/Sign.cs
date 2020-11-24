@@ -5,10 +5,6 @@ using UnityEngine.UI;
 
 public class Sign : MonoBehaviour
 {
-
-    public GameObject questionMark;
-    public Vector3 questionMarkOffset;
-
     public GameObject dialogBox;
     public Text dialogText;
     public string dialog;
@@ -30,11 +26,9 @@ public class Sign : MonoBehaviour
             if (dialogBox.activeInHierarchy) {
                 
                 dialogBox.SetActive(false);
-                ShowQuestionMark();
 
             } else {
 
-                HideQuestionMark();
 
                 dialogText.text = dialog;
                 dialogBox.SetActive(true);
@@ -44,23 +38,11 @@ public class Sign : MonoBehaviour
     }
 
     
-    private void ShowQuestionMark() {
-        questionMark.transform.position = this.transform.position + questionMarkOffset;
-        questionMark.SetActive(true);
-    }
-
-
-    private void HideQuestionMark() {
-        questionMark.SetActive(false);
-    }
-
-
     private void OnTriggerEnter2D(Collider2D other) {
 
         if (other.CompareTag("Player")) {
 
             playerInRange = true;
-            ShowQuestionMark();
 
         }
 
@@ -74,7 +56,6 @@ public class Sign : MonoBehaviour
             playerInRange = false;
             
             dialogBox.SetActive(false);
-            HideQuestionMark();
 
         }
 

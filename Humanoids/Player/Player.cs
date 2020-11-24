@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : Humanoid
 {
     public Signal playerHealthSignal;
+    public GameObject contextClue;
     public IntValue health;
     public VectorValue playerPositionStorage;
     private Vector3 moveChange;
@@ -98,6 +99,15 @@ public class Player : Humanoid
             OnDeath();
         }
 
+    }
+
+
+    //MISC
+    public void setContextClueEnabled(bool enabled, Sprite clueSprite) {
+        contextClue.SetActive(enabled);
+        if (enabled) {
+            contextClue.GetComponent<SpriteRenderer>().sprite = clueSprite;
+        }
     }
 
 }
