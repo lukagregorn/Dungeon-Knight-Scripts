@@ -3,61 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sign : MonoBehaviour
+public class Sign : Interactable
 {
     public GameObject dialogBox;
     public Text dialogText;
     public string dialog;
     public bool dialogActive;
 
-    private bool playerInRange;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    // engage function
+    protected override void OnEngage() {
+        dialogText.text = dialog;
+        dialogBox.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetButtonDown("Interact") && playerInRange) {
-
-            if (dialogBox.activeInHierarchy) {
-                
-                dialogBox.SetActive(false);
-
-            } else {
-
-
-                dialogText.text = dialog;
-                dialogBox.SetActive(true);
-            }
-
-        }
+    // disengage function
+    protected override void OnDisengage() {
+        dialogBox.SetActive(false);
     }
 
-    
-    private void OnTriggerEnter2D(Collider2D other) {
-
-        if (other.CompareTag("Player")) {
-
-            playerInRange = true;
-
-        }
-
-    }
-    
-
-    private void OnTriggerExit2D(Collider2D other) {
-
-        if (other.CompareTag("Player")) {
-
-            playerInRange = false;
-            
-            dialogBox.SetActive(false);
-
-        }
-
-    }
 }

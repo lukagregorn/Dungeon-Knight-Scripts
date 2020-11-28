@@ -103,11 +103,11 @@ public class Player : Humanoid
 
 
     //MISC
-    public void setContextClueEnabled(bool enabled, Sprite clueSprite) {
-        contextClue.SetActive(enabled);
-        if (enabled) {
+    public void SetContextClue(Sprite clueSprite, bool visible) {
+        if (enabled && clueSprite) {
             contextClue.GetComponent<SpriteRenderer>().sprite = clueSprite;
         }
+        contextClue.SetActive(visible);
     }
 
 }
