@@ -74,7 +74,7 @@ public class Humanoid : MonoBehaviour
         }
     }
 
-    public void OnDeath() {
+    public virtual void OnDeath() {
         ChangeState(HumanoidState.dead);
         gameObject.SetActive(false);
     }

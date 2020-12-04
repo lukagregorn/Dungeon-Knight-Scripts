@@ -8,11 +8,7 @@ public class Interactable : MonoBehaviour
     public Sprite contextClue;
 
     protected Collider2D playerInRange;
-    protected bool isActive;
-
-    void Start() {
-        isActive = false;
-    }
+    protected bool isActive = false;
 
     // Update is called once per frame
     void Update()

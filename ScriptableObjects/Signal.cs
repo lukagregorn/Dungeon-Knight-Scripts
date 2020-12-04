@@ -9,7 +9,8 @@ public class Signal : ScriptableObject {
 
     public void Fire() {
         foreach (SignalListener s in listeners) {
-            s.OnEvent();
+            if (s)
+                s.OnEvent();
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : Humanoid
 {
     public Signal playerHealthSignal;
+    public Signal playerDiedSignal;
     public GameObject contextClue;
     public IntValue health;
     public VectorValue playerPositionStorage;
@@ -99,6 +100,15 @@ public class Player : Humanoid
             OnDeath();
         }
 
+    }
+
+
+    public override void OnDeath() {
+        ChangeState(HumanoidState.dead);
+        Debug.Log("Dead boi");
+        playerDiedSignal.Fire();
+
+        gameObject.SetActive(false);
     }
 
 
