@@ -13,7 +13,6 @@ public class DeathManager : MonoBehaviour
 
 
     public void PlayerDiedScreen() {
-        Debug.Log("This");
         text.SetActive(true);
         playerPositionStorage.value = playerPositionStorage.initialValue;
         StartCoroutine(DeathScreenCoroutine());
