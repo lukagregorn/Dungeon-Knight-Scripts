@@ -18,6 +18,7 @@ public class Player : Humanoid
         if (maxHealth.value % 2 != 0)
             Debug.LogWarning("Player max health is not even. Hearts may not show correctly");
         health.value = maxHealth.value;
+        playerHealthSignal.Fire();
 
         // initial direction
         animator.SetFloat("moveX", 0);

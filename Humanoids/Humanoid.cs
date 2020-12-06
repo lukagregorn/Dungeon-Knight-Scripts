@@ -27,8 +27,12 @@ public class Humanoid : MonoBehaviour
     
     // AWAKE [make references to own objects]
     private void Awake() {
+        Debug.Log("I have awoken");
         animator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
+        
+        Debug.Log(myRigidbody);
+        Debug.Log(animator);
 
         currentState = HumanoidState.idle;
     }
@@ -77,6 +81,7 @@ public class Humanoid : MonoBehaviour
     public virtual void OnDeath() {
         ChangeState(HumanoidState.dead);
         gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     // COMMON CHECKS
