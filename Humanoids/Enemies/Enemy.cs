@@ -25,6 +25,10 @@ public class Enemy : Humanoid
             Debug.Log(maxHealth.value);
             Debug.Log(maxHealth.initialValue);
             Debug.Log(health);
+            Debug.Log(chaseRadius.initialValue);
+            Debug.Log(chaseRadius.value);
+            Debug.Log(attackRadius.initialValue);
+            Debug.Log(attackRadius.value);
         } else {
             Debug.Log("No player transform");
         }
@@ -49,18 +53,12 @@ public class Enemy : Humanoid
     }
 
     protected bool IsInChaseRadius() {
-        if (target)
-            return (Vector3.Distance(target.position, transform.position) <= chaseRadius.value);
-        else
-            return false;
+        return (Vector3.Distance(target.position, transform.position) <= chaseRadius.value);
     }
 
 
     protected bool IsInAttackRadius() {
-        if (target)
-            return (Vector3.Distance(target.position, transform.position) <= attackRadius.value);
-        else
-            return false;
+        return (Vector3.Distance(target.position, transform.position) <= attackRadius.value);
     }
 
 
