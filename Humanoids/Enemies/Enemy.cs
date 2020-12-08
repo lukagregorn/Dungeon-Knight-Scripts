@@ -20,17 +20,8 @@ public class Enemy : Humanoid
         GameObject p = GameObject.FindWithTag("Player");
         if (p) {
             target = p.transform;
-            Debug.Log("target transform");
-            Debug.Log(target.position);
-            Debug.Log(maxHealth.value);
-            Debug.Log(maxHealth.initialValue);
-            Debug.Log(health);
-            Debug.Log(chaseRadius.initialValue);
-            Debug.Log(chaseRadius.value);
-            Debug.Log(attackRadius.initialValue);
-            Debug.Log(attackRadius.value);
         } else {
-            Debug.Log("No player transform");
+            Debug.LogWarning("No player transform");
         }
     }
 
@@ -38,7 +29,6 @@ public class Enemy : Humanoid
     // MOVEMENT
     protected Vector3 MoveTowardsTarget() {
         HumanoidState state = GetState();
-        Debug.Log(state);
         if (state == HumanoidState.idle || state == HumanoidState.walk) {
             Vector3 tmp = Vector3.MoveTowards(transform.position, target.position, speed.value * Time.deltaTime);
             myRigidbody.MovePosition(tmp);

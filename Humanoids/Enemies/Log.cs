@@ -9,11 +9,9 @@ public class Log : Enemy
     private void FixedUpdate()
     {
         if (IsInChaseRadius()) {
-            Debug.Log("Is in chase radius -- waking up");
             animator.SetBool("wakeUp", true);
 
             if (!IsInAttackRadius()) {
-                Debug.Log("Walk radius ready");
                 Vector3 direction = MoveTowardsTarget();
                 
                 // determine which animation to play
@@ -38,10 +36,9 @@ public class Log : Enemy
 
 
             } else {
-                Debug.Log("Attack");
+                //Debug.Log("Attack");
             }
         } else {
-            Debug.Log(target.position);
             animator.SetBool("wakeUp", false);
         }
     }

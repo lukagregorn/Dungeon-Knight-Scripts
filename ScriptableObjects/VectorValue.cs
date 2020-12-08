@@ -10,5 +10,7 @@ public class VectorValue : ScriptableObject, ISerializationCallbackReceiver {
     public void OnBeforeSerialize() {
         value = initialValue;
     }
-    public void OnAfterDeserialize() {}
+    public void OnAfterDeserialize() {
+        value = initialValue;
+    }
 }

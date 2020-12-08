@@ -30,10 +30,7 @@ public class Spawner : MonoBehaviour
     private IEnumerator SpawnCoroutine() {
         while (this.gameObject.activeInHierarchy) {
             yield return new WaitForSeconds(spawnRate);
-            Debug.Log(currentTotalEnemies.value);
-            Debug.Log(maxTotalEnemies.value);
             if (currentTotalEnemies.value < maxTotalEnemies.value) {
-                Debug.Log("Got through");
                 SpawnEnemy();
             }
 
@@ -42,7 +39,6 @@ public class Spawner : MonoBehaviour
 
 
     private void EnemyDiedHandler() {
-        Debug.Log("Enemy died");
         currentTotalEnemies.value -= 1;
     }
 
