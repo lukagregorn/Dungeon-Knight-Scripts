@@ -91,8 +91,6 @@ public class Enemy : Humanoid
 
     // COMBAT
     public override void TakeDamage(int damage) {
-        Debug.Log(damage);
-        Debug.Log(health);
         health -= damage;
         if (health <= 0) {
             OnDeath();
