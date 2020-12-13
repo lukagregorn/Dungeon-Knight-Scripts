@@ -24,6 +24,9 @@ public class DungeonManager : MonoBehaviour
     public Text enemiesLeftText;
     public GameObject enemiesLefTextHolder;
 
+    // player specific
+    public IntValue bestWave;
+
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +55,13 @@ public class DungeonManager : MonoBehaviour
         // show wave cleared
         enemiesLefTextHolder.SetActive(false);
         waveText.text = "WAVE " + currentWave.ToString() + " CLEARED";
+
+        // update best wave
+        if (currentWave > bestWave.initialValue) {
+            bestWave.initialValue = currentWave;
+        }
+        
+        //Debug.Log("Best wave = " + bestWave.initialValue.ToString());
 
         currentWave += 1;
 

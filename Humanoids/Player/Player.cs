@@ -12,8 +12,40 @@ public class Player : Humanoid
     public VectorValue playerPositionStorage;
     private Vector3 moveChange;
 
+    // playerData stuff
+    public IntValue healthLevel;
+    public IntValue strenghtLevel;
+    public IntValue speedLevel;
+    public IntValue coins;
+    public IntValue bestWave;
+
+
+    private void SetupData() {
+        PlayerData data = SaveSystem.LoadPlayer();
+        if (data != null) {
+            // we found our save file
+            healthLevel.initialValue = data.healthLevel;
+            strenghtLevel.initialValue = data.strenghtLevel;
+            speedLevel.initialValue = data.speedLevel;
+
+            coins.initialValue = data.coins;
+            bestWave.initialValue = data.bestWave;
+        } else {
+            healthLevel.initialValue = 1;
+            strenghtLevel.initialValue = 1;
+            speedLevel.initialValue = 1;
+
+            coins.initialValue = 0;
+            bestWave.initialValue = 0;
+        }
+    }
+
     // Start is called before the first frame update
     private void Start() {
+        
+        // load player data
+        SetupData();
+
         // initial health
         if (maxHealth.value % 2 != 0)
             Debug.LogWarning("Player max health is not even. Hearts may not show correctly");
@@ -106,9 +138,15 @@ public class Player : Humanoid
 
     public override void OnDeath() {
         ChangeState(HumanoidState.dead);
-        Debug.Log("Dead boi");
-        playerDiedSignal.Fire();
+        
+        health.value = 0;
+        playerHealthSignal.Fire();
 
+        // save data
+        SaveSystem.SavePlayer(this);
+
+        // fire death signal
+        playerDiedSignal.Fire();
         gameObject.SetActive(false);
     }
 
