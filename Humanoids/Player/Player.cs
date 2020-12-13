@@ -11,6 +11,7 @@ public class Player : Humanoid
     public IntValue health;
     public VectorValue playerPositionStorage;
     private Vector3 moveChange;
+    public Joystick joystick;
 
     // playerData stuff
     public IntValue healthLevel;
@@ -67,6 +68,11 @@ public class Player : Humanoid
                 && state != HumanoidState.stagger) {
             StartCoroutine(AttackCoroutine());
         }
+
+        //for (int i = 0; i < Input.touchCount; i++) {
+        //    Vector3 touchPos = Camera.main.ScreenToWorldPoint(Input.touches[i].position);
+        //    Debug.DrawLine(transform.position, touchPos, Color.red);
+        //}
     }
 
 
@@ -76,8 +82,12 @@ public class Player : Humanoid
         moveChange = Vector3.zero;
 
         // get new change
-        moveChange.x = Input.GetAxisRaw("Horizontal");
-        moveChange.y = Input.GetAxisRaw("Vertical");
+        //moveChange.x = Input.GetAxisRaw("Horizontal");
+        //moveChange.y = Input.GetAxisRaw("Vertical");
+
+        moveChange.x = joystick.Horizontal;;
+        moveChange.y = joystick.Vertical;
+        
 
         HumanoidState state = GetState();
 
