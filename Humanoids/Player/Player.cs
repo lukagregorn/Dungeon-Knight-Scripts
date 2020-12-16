@@ -7,6 +7,7 @@ public class Player : Humanoid
 {
     public Signal playerHealthSignal;
     public Signal playerDiedSignal;
+    public Signal playerCoinsSignal;
     public GameObject contextClue;
     public IntValue health;
     public VectorValue playerPositionStorage;
@@ -122,6 +123,15 @@ public class Player : Humanoid
 
 
     // COMBAT
+    public void OnAttack() {
+        HumanoidState state = GetState();
+
+        if (state != HumanoidState.attack && state != HumanoidState.stagger) {
+            StartCoroutine(AttackCoroutine());
+        }
+    }
+
+
     private IEnumerator AttackCoroutine() {
         ChangeState(HumanoidState.attack);
         animator.SetBool("attacking", true);
@@ -168,5 +178,13 @@ public class Player : Humanoid
         }
         contextClue.SetActive(visible);
     }
+
+
+    public void UpdateCoins(int amount) {
+        coins.initialValue += amount;
+        Debug.Log(coins.initialValue);
+        //playerCoinsSignal.Fire();
+    }
+
 
 }

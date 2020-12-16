@@ -7,11 +7,11 @@ using Pathfinding;
 
 public class Enemy : Humanoid
 {
-
     public Transform home;
     public Transform target;
     public FloatValue chaseRadius;
     public FloatValue attackRadius;
+    public GameObject coinPrefab;
     public UnityEvent DiedEvent;
     protected int health;
     
@@ -93,6 +93,7 @@ public class Enemy : Humanoid
     public override void TakeDamage(int damage) {
         health -= damage;
         if (health <= 0) {
+            DropCoin();
             OnDeath();
         }
     }
@@ -101,6 +102,12 @@ public class Enemy : Humanoid
     // DIED EVENT FOR SPAWNERS
     private void OnDestroy() {
         DiedEvent.Invoke();
+    }
+
+    // DROPS
+    private void DropCoin() {
+        GameObject parent = GameObject.FindWithTag("CoinsParent");
+        Instantiate(coinPrefab, transform.position, Quaternion.identity, parent.transform);
     }
 
 }
