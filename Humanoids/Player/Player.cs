@@ -182,8 +182,7 @@ public class Player : Humanoid
 
     public void UpdateCoins(int amount) {
         coins.initialValue += amount;
-        Debug.Log(coins.initialValue);
-        //playerCoinsSignal.Fire();
+        playerCoinsSignal.Fire();
     }
 
 

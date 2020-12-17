@@ -101,7 +101,11 @@ public class Enemy : Humanoid
 
     // DIED EVENT FOR SPAWNERS
     private void OnDestroy() {
-        DiedEvent.Invoke();
+        if (target != null) {
+            if (target.gameObject.activeInHierarchy) {
+                DiedEvent.Invoke();
+            }
+        }
     }
 
     // DROPS
