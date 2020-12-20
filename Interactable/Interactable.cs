@@ -6,6 +6,7 @@ public class Interactable : MonoBehaviour
 {
 
     public Sprite contextClue;
+    public GameObject interactButton;
 
     protected Collider2D playerInRange;
     protected bool isActive = false;
@@ -13,7 +14,14 @@ public class Interactable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Interact") && playerInRange != null) {
+        if (Input.GetButtonDown("Interact")) {
+            OnInteract();
+        }
+    }
+
+    // interact on screen button event
+    public void OnInteract() {
+        if (playerInRange != null) {
             if (!isActive)
                 OnEngage();
             else
@@ -29,14 +37,17 @@ public class Interactable : MonoBehaviour
 
             playerInRange = other;
             Player p = playerInRange.GetComponent<Player>();
-
+            
             p.SetContextClue(contextClue, true);
+            interactButton.SetActive(true);
         }
     }
     
     private void OnTriggerExit2D(Collider2D other) {
         if (other.CompareTag("Player")) {
 
+            interactButton.SetActive(false);
+            
             Player p = other.GetComponent<Player>();
             p.SetContextClue(null, false);
 

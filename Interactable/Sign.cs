@@ -7,12 +7,16 @@ public class Sign : Interactable
 {
     public GameObject dialogBox;
     public Text dialogText;
-    public string dialog;
 
+    public IntValue bestWave;
+
+    private string GetText() {
+        return "Dungeon ahead . . . \nBEST WAVE: " + bestWave.initialValue.ToString();
+    }
 
     // engage function
     protected override void OnEngage() {
-        dialogText.text = dialog;
+        dialogText.text = GetText();;
         dialogBox.SetActive(true);
     }
 

@@ -29,6 +29,9 @@ public class Enemy : Humanoid
             return;
         }
 
+        // start attack coroutine
+        StartCoroutine(AttackCoroutine());
+
         // ai
         target = p.transform;
         seeker = GetComponent<Seeker>();
@@ -93,20 +96,20 @@ public class Enemy : Humanoid
     public override void TakeDamage(int damage) {
         health -= damage;
         if (health <= 0) {
+
+            if (target.gameObject.activeInHierarchy) {
+                DiedEvent.Invoke();
+            }
+
             DropCoin();
             OnDeath();
         }
     }
 
-
-    // DIED EVENT FOR SPAWNERS
-    private void OnDestroy() {
-        if (target != null) {
-            if (target.gameObject.activeInHierarchy) {
-                DiedEvent.Invoke();
-            }
-        }
+    public virtual IEnumerator AttackCoroutine() {
+        yield return new WaitForSeconds(0f);
     }
+
 
     // DROPS
     private void DropCoin() {
